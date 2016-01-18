@@ -149,17 +149,22 @@
                 
                     <div class="panel panel-primary" >
                     <div class="panel-heading">Hire Request</div>
-						<table class="table table-condensed">
-							<th>Hire ID</th>
-							<th>Date</th>
-							<th>Time</th>
-							<th>No of Passengers</th>
-							<th>Customer Bid</th>
+						
+							
 							
 							<?php
 								$hireRequests =getAvailableHireRequests($driver_id);
+								if(sizeof($hireRequests) > 0){
+							?>
+							<table class="table table-condensed">
+								<th>Hire ID</th>
+								<th>Date</th>
+								<th>Time</th>
+								<th>No of Passengers</th>
+								<th>Customer Bid</th>
 								
-								foreach ($hireRequests as $request) {
+							<?php	
+									foreach ($hireRequests as $request) {
 							?>
 							
 										<tr >
@@ -173,7 +178,10 @@
 											<td><a href="#" class="btn btn-sm btn-success" onclick="sendData(<?php echo $request[2]?>,<?php echo $request[1]?>,<?php echo $request[4]?>,<?php echo $request[3]?>);setTimeout(initialize, 500);" data-toggle="modal" data-target="#basicModal">Map</a></td>
 										 </tr>
 							<?php		
+									}
 															
+								}else{
+									echo "<p style=\"font-color: #ff0000;\">No Hire Requests found at the moment </p>";;
 								}
 							?>
 						

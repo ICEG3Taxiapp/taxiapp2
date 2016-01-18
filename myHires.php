@@ -148,19 +148,25 @@
                 
                     <div class="panel panel-primary" >
                     <div class="panel-heading">My Hires</div>
-						<table class="table table-condensed">
-							<th>Tour ID</th>
-							<th>Date</th>
-							<th>Time</th>
-							<th>Passenger Name</th>
-							<th>Contact No</th>
-							<th>No of Passengers</th>
-							<th>Charges</th>
+						
+							
 							
 							<?php
 								$hireRequests =getMyHires($driver_id);
 								
-								foreach ($hireRequests as $request) {
+								if(sizeof($hireRequests) > 0){
+							?>
+							<table class="table table-condensed">
+								<th>Tour ID</th>
+								<th>Date</th>
+								<th>Time</th>
+								<th>Passenger Name</th>
+								<th>Contact No</th>
+								<th>No of Passengers</th>
+								<th>Charges</th>
+							
+							<?php	
+									foreach ($hireRequests as $request) {
 							?>
 										<tr >
 											<td><?php echo $request[0] ?></td>
@@ -174,8 +180,11 @@
 											<td align="center"><button href="#" class="btn btn-sm btn-success" onclick="bidData(<?php echo $request[0]?>)" <?php echo enableBid($driver_id,$request[1])?> data-toggle="modal" data-target="#basicModal2"> <?php echo getBid($driver_id,$request[1])?></button></td>
 											<td><a href="#" class="btn btn-sm btn-success" onclick="sendData(<?php echo $request[3]?>,<?php echo $request[2]?>,<?php echo $request[5]?>,<?php echo $request[4]?>);setTimeout(initialize, 500);" data-toggle="modal" data-target="#basicModal">Map</a></td>
 										 </tr>
-							<?php		
+							<?php	
+									}	
 															
+								}else{
+									echo  "<p style=\"font-color: #ff0000;\">No Tours arranged at the moment.Please check available hire requests and bid there </p>";
 								}
 							?>
 						
