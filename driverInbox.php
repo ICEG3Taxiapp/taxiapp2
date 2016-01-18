@@ -46,7 +46,7 @@
 							?>
 										<tr>
 											<td><?php echo $message[1] ?></td>
-											<td align="center"><button href="#" class="btn btn-sm btn-success" onclick="<?php setDriverInboxViewed($driver_id,$message[0]) ;  header("refresh: 1;");?>"  > OK</button></td>
+											<td align="center"><button href="#" class="btn btn-sm btn-success" onclick="<?php setDriverInboxViewed($driver_id,$message[0]) ; ?>"  > OK</button></td>
 										</tr>
 							<?php		
 															
