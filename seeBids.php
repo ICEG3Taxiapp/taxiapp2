@@ -95,7 +95,7 @@ if (isset($_POST['requestId'])) {
          
 function getBids(){
     $bids = array();
-     $id = $_SESSION['userId'];
+     //$id = $_SESSION['userId'];
     $reqId = $_SESSION['requestId'];
     $query = mysql_query("SELECT `driver_id`,`name`,`request_id`,`bid` FROM driverbid NATURAL JOIN driver WHERE request_id = $reqId");
     
@@ -165,7 +165,12 @@ function getMyRequests(){
 										<td><?php echo $request[5] ?></td>
 										<td><?php echo $request[6] ?></td>
 										<td><?php echo $request[7] ?></td>
-                                        <td align="center"><button href="#" onclick="sendBidData(<?php echo $request[0]?>)" class="btn btn-info btn-lg" data-toggle="modal" data-target="#basicModal2">See Bids</button></td>
+                                        <td align="center">
+                                            <form action="modelView.php" method="post">
+                                            <input type="hidden" name="reqId" value="<?php echo $request[0]?>">
+                                            <button type ="submit" href="#" onclick="sendBidData(<?php echo $request[0]?>)" class="btn btn-info btn-lg" data-toggle="modal" data-target="#basicModal2">See Bids</button>
+                                            </form>
+                                        </td>
 									 </tr>
 									
 						
