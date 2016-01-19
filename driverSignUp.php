@@ -20,6 +20,9 @@ $repeatPassword = md5($_POST['repeatPassword']);
 $vehicleNo = ($_POST['vehicleNo']);
 $vehicleType = ($_POST['vehicleType']);
 $maxPassengers = ($_POST['maxPassengers']);
+$startLat=$_POST['startLat'];
+$startLong=$_POST['startLong'];
+
 
 if(checkUserName($id)==1){
     Print '<script>alert("Driver ID is already taken!");</script>'; // prompts user
@@ -32,9 +35,9 @@ else if($password != $repeatPassword){
 }
 
 else {
-    $insertQueryDriver = "INSERT INTO `driver` (`driver_id`, `password`, `name`, `contact_no`, `nic_no`, `availability`, `xCornidates`, `yCornidates`) VALUES ('$id', '$password', '$name', '$contactNo', '$nic', '1', NULL, NULL);";
+    $insertQueryDriver = "INSERT INTO `driver` (`driver_id`, `password`, `name`, `contact_no`, `nic_no`, `availability`, `longitude`, `lattitude`) VALUES ('$id', '$password', '$name', '$contactNo', '$nic', '1', '$startLong', '$startLat')";
     $resultDriver = mysql_query($insertQueryDriver);
-    $insertQueryTaxi = "INSERT INTO `taxi` (`reg_no`, `type`, `max_passengers`, `driver_id`) VALUES ('$vehicleNo', '$vehicleType', '$maxPassengers', '$id');";
+    $insertQueryTaxi = "INSERT INTO `taxi` (`reg_no`, `type`, `max_passengers`, `driver_id`) VALUES ('$vehicleNo', '$vehicleType', '$maxPassengers', '$id')";
     $resultTaxi = mysql_query($insertQueryTaxi);
     Print '<script>alert("Successfully sign up!");</script>'; // prompts user
     Print '<script>window.location.assign("index.php");</script>'; // redirects to the login page
