@@ -59,9 +59,16 @@ function getAvailability($driverId){
 }
 
 function changeAvailability($driverId){
+	mysql_query("START TRANSACTION");
     $status = "";
     $query = mysql_query("UPDATE driver SET availability = availability XOR 1 WHERE  driver_id = '$driverId'");
+    if ($query) {
+		mysql_query("COMMIT");
+	} else {        
+		mysql_query("ROLLBACK");
+	}
 }
+
 function insertDriverBid($driverId,$requestId,$bid){
 	mysql_query("START TRANSACTION");
 	echo $driverId,$requestId,$bid;
@@ -120,7 +127,6 @@ function getBidStatus($driverId,$requestId){
     }
 }
 
-//////// 18 / 1/ 2016
 
 function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 
