@@ -35,8 +35,12 @@
 	document.getElementById("content").innerHTML='<object type="text/html" data="availableHires.php" style="width:1000px; height:3000px; overflow:auto;border:5px  "></object>';
   }	
   
-   function loadMyHires(){
+  function loadMyHires(){
 	document.getElementById("content").innerHTML='<object type="text/html" data="myHires.php" style="width:1000px; height:3000px; overflow:auto;border:5px  "></object>';
+  }
+  
+  function loadInbox(){
+	document.getElementById("content").innerHTML='<object type="text/html" data="driverInbox.php" style="width:1000px; height:3000px; overflow:auto;border:5px  "></object>';
   }	
   
 </script>
@@ -92,7 +96,7 @@
                     <a href="#" onclick="loadAvailableRequests()">Hire Requests</a>
                 </li>
                 <li>
-                    <a href="#"  onclick="">inbox</a>
+                    <a href="#"  onclick="loadInbox()">Inbox</a>
                 </li>
 			</ul>
 		</div>

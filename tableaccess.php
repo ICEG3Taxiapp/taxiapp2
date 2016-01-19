@@ -213,4 +213,20 @@ function getMyHires($driverId){
     return $requests;
 }
 
+function getAvailableMessages($driverId){
+	$messages = array();
+	$query = mysql_query("SELECT driver_inbox_id,message,is_viewed FROM driver_inbox WHERE driver_id = '$driverId' ");
+    
+     while($row = mysql_fetch_array($query)){ // display all rows  from query
+		$data = array();
+		$data[0] = $row['driver_inbox_id'];
+		$data[1] = $row['message'];
+		$data[2] = $row['is_viewed'];
+
+        $messages[]= $data;
+    }
+    
+    return $messages;
+}
+
 ?>
