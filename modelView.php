@@ -1,11 +1,11 @@
 <?php
-echo $_POST["reqId"];
+//echo $_GET["reqId"];
 include "header.php";
 
 function getBids(){
     $bids = array();
      //$id = $_SESSION['userId'];
-    $reqId = $_POST["reqId"];
+    $reqId = $_GET["reqId"];
     $query = mysql_query("SELECT `driver_id`,`name`,`request_id`,`bid` FROM driverbid NATURAL JOIN driver WHERE request_id = $reqId");
     
     while($row = mysql_fetch_array($query)){ // display all rows  from query
@@ -64,6 +64,7 @@ function getBids(){
                             };
                     $.post(ajaxurl, data, function (response) {
                     alert("You have suuccessfully booked a taxi");
+                    location.href = 'seeBids.php';
         });
     });
 
