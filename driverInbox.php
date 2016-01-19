@@ -67,7 +67,7 @@
 									}
 								}
 								else{
-									echo "No Messages found ...";
+									echo  "<p style=\"font-color: #ff0000;\">No Messages found at the moment ...</p>";
 								}
 							?>
 						
