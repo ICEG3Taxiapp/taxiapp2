@@ -36,8 +36,7 @@ function getHireRequests(){
     		$requestRow[9] = $row['contact_no'];
     		 
             $requests[]= $requestRow;
-            
-           
+
         }
         return $requests;
     }
@@ -62,12 +61,16 @@ function getAvailability($driverId){
 function changeAvailability($driverId){
     $status = "";
     $query = mysql_query("UPDATE driver SET availability = availability XOR 1 WHERE  driver_id = '$driverId'");
-    
 }
 function insertDriverBid($driverId,$requestId,$bid){
+	mysql_query("START TRANSACTION");
 	echo $driverId,$requestId,$bid;
     $query = mysql_query("INSERT INTO driverbid (`bid`, `driver_id`, `request_id`) VALUES ('$bid','$driverId','$requestId')");
-    
+    if ($query) {
+		mysql_query("COMMIT");
+	} else {        
+		mysql_query("ROLLBACK");
+	}
 }
 
 function hasBid($driverId,$requestId){
@@ -257,9 +260,15 @@ function getAvailableMessages($driverId){
 }
 
 function setDriverInboxViewed($driverId,$driverInboxId){
+	mysql_query("START TRANSACTION");
     $status = "";
     echo $driverId." ".$driverInboxId;
     $query = mysql_query("UPDATE driver_inbox SET is_viewed = TRUE WHERE driver_id = '$driverId' AND driver_inbox_id = '$driverInboxId'");
+    if ($query) {
+		mysql_query("COMMIT");
+	} else {        
+		mysql_query("ROLLBACK");
+	}
 }
 
 ?>
