@@ -43,6 +43,10 @@
   function loadInbox(){
 	document.getElementById("content").innerHTML='<object type="text/html" data="driverInbox.php" style="width:1000px; height:3000px; overflow:auto;border:5px  "></object>';
   }	
+
+  function loadMap(){
+  document.getElementById("content").innerHTML='<object type="text/html" data="changeLocationMap.php" style="width:1000px; height:3000px; overflow:auto;border:5px  "></object>';  
+  }
   
 </script>
 
@@ -72,9 +76,9 @@
           </ul>
         <div id="navbar" class="navbar-collapse collapse">
           <form class="navbar-form navbar-right" action="footer.php">
+            <button type="button" class="btn btn-danger" onclick="loadMap()">Change Default Location</button>
             <button type="submit" class="btn btn-danger">Sign Out</button>
           </form>
-          
           <!--form class="navbar-form navbar-right" action="CallFunction.php" method ="post" >
 				<input type="hidden" name="driver_id" value="<?=$driver_id?>" />
 				<a><font color="white">Availability</font></a> 
@@ -101,7 +105,7 @@
 								$messages =getAvailableMessages($driver_id);
 								
 					?>
-                    <a href="#"  onclick="loadInbox()">Inbox ( <?php echo sizeof($messages);?> )</a>
+                    <a href="#"  id="inboxCount" onclick="loadInbox()">Inbox ( <?php echo sizeof($messages);?> )</a>
                 </li>
 			</ul>
 		</div>

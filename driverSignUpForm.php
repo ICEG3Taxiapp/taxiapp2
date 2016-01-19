@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: manesh
- * Date: 12/16/15
- * Time: 12:42 PM
- */
 ini_set('display_errors','On');
 session_start();
 ?>

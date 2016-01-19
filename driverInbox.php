@@ -41,7 +41,9 @@
 							
 							<?php
 								$messages =getAvailableMessages($driver_id);
-								
+
+								$count=sizeof($messages);
+                echo "<script>document.getElementById('inboxCount').innerHTML=Inbox ( ".$count." )</script>";
 								foreach ($messages as $message) {
 							?>
 										<tr>
