@@ -32,6 +32,7 @@ if (isset($_POST['requestId'])) {
                 };
             $.post('GlobalUpdate.php', data, function (response) {
                 alert(reqId);
+                document.getElementById("myO").data = "modelView.php?reqId="+reqId;
         });
     });
     }
@@ -95,7 +96,7 @@ if (isset($_POST['requestId'])) {
          
 function getBids(){
     $bids = array();
-     $id = $_SESSION['userId'];
+     //$id = $_SESSION['userId'];
     $reqId = $_SESSION['requestId'];
     $query = mysql_query("SELECT `driver_id`,`name`,`request_id`,`bid` FROM driverbid NATURAL JOIN driver WHERE request_id = $reqId");
     
@@ -165,7 +166,9 @@ function getMyRequests(){
 										<td><?php echo $request[5] ?></td>
 										<td><?php echo $request[6] ?></td>
 										<td><?php echo $request[7] ?></td>
-                                        <td align="center"><button href="#" onclick="sendBidData(<?php echo $request[0]?>)" class="btn btn-info btn-lg" data-toggle="modal" data-target="#basicModal2">See Bids</button></td>
+                                        <td align="center">
+                                            <button type ="button" href="#" onclick="sendBidData(<?php echo $request[0]?>)" class="btn btn-info btn-lg" data-toggle="modal" data-target="#basicModal2">See Bids</button>
+                                        </td>
 									 </tr>
 									
 						
@@ -193,54 +196,10 @@ function getMyRequests(){
                     <br>
                     <br>
                     <div class="panel panel-primary" style="width:75%;">
-                    <div class="panel-heading">Hire Request</div>
-                    <table class="table table-striped">
-						<th>Driver Name</th>
-						<th>Bid</th>
-						<?php
-							$hireBids = getBids();
-							
-							foreach ($hireBids as $bid) {
-						?>
-								
-									<tr>
-										<td><?php echo $bid[0] ?></td>
-										<td><?php echo $bid[1] ?></td>
-										<td>
-                                            <form>
-                                            <button type="submit" value="<?php echo $bid[2] ?>" class="btn-success">Accept Ride</button> 
-                                            </form>
-                                        </td>
-									 </tr>
-									
-						
-						<?php
-							}
-						?>
-                    
-                    </table>
-                        </div>
-                        <?php
-                            echo $_SESSION['requestId'];
-                        ?>
+                    <div class="panel-heading">My Requests</div>
+                    <object id="myO" type="text/html" data=""  style="width:100%; overflow:auto;border:5px "></object>
             </div>
         </div>
-        
-        <script>
-            $(document).ready(function(){
-                $('.btn-success').click(function(){
-                    var clickBtnValue = $(this).val();
-                    var ajaxurl = 'ajax.php',
-                    data =  {
-                                'driverId': clickBtnValue
-                            };
-                    $.post(ajaxurl, data, function (response) {
-                    alert("You have suuccessfully booked a taxi");
-        });
-    });
-
-});
-        </script>
     
                     
                     </div>
