@@ -35,9 +35,9 @@ else if($password != $repeatPassword){
 }
 
 else {
-    $insertQueryDriver = "INSERT INTO `driver` (`driver_id`, `password`, `name`, `contact_no`, `nic_no`, `availability`, `xCornidates`, `yCornidates`) VALUES ('$id', '$password', '$name', '$contactNo', '$nic', '1', '$startLong', '$startLat');";
+    $insertQueryDriver = "INSERT INTO `driver` (`driver_id`, `password`, `name`, `contact_no`, `nic_no`, `availability`, `longitude`, `lattitude`) VALUES ('$id', '$password', '$name', '$contactNo', '$nic', '1', '$startLong', '$startLat')";
     $resultDriver = mysql_query($insertQueryDriver);
-    $insertQueryTaxi = "INSERT INTO `taxi` (`reg_no`, `type`, `max_passengers`, `driver_id`) VALUES ('$vehicleNo', '$vehicleType', '$maxPassengers', '$id');";
+    $insertQueryTaxi = "INSERT INTO `taxi` (`reg_no`, `type`, `max_passengers`, `driver_id`) VALUES ('$vehicleNo', '$vehicleType', '$maxPassengers', '$id')";
     $resultTaxi = mysql_query($insertQueryTaxi);
     Print '<script>alert("Successfully sign up!");</script>'; // prompts user
     Print '<script>window.location.assign("index.php");</script>'; // redirects to the login page
