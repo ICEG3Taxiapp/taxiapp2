@@ -18,13 +18,17 @@ session_start();
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-
+    <link rel="icon" href="../../favicon.ico">
+    <script type="text/javascript" src="js/Functions.js"></script>
     <title>Sign up</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script src="http://maps.googleapis.com/maps/api/js"></script>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    
 </head>
 
 <body>
@@ -63,7 +67,7 @@ session_start();
             <label for="maxPassenger" class="control-label" style="padding-top: 20px">Enter Maximum Number of Passengers</label>
             <input type="text" name="maxPassengers" id="maxPassengers" class="form-control" placeholder="Maximum Passengers" onfocusout="validateMaxPassengers()" required autofocus>
              <label for="showMap" class="control-label" style="padding-top: 20px">Select Default Location To Filter Hire Requests</label>
-            <button name="showMap" type="button" id="showMap" class="btn btn-primary btn-block" onclick="" data-toggle="modal" data-target="#basicModal">Map</button>
+            <button name="showMap" type="button" id="showMap" class="btn btn-primary btn-block" onclick="setTimeout(initialize, 500);" data-toggle="modal" data-target="#basicModal">Map</button>
             <input type="hidden" id="startLat" name="test" value="initial" />
             <input type="hidden" id="startLong" name="test1" value="initial" />
             <br>
@@ -84,16 +88,16 @@ session_start();
                     <div class="modal-content">
                       <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">close x</button>
-                        <h4 class="modal-title" id="myModalLabel">Route for the request</h4>
+                        <h4 class="modal-title" id="myModalLabel">Default Location</h4>
                       </div>
                     <div class="modal-body">
-                    <pre id="distance_duration"></pre>
+                    <pre id="distance_duration">Select the default location to filter hire requests</pre>
                     
                     
                     <div id="googleMap" style="width:500px;height:400px; margin:auto; border: 5px solid #73AD21; padding: 15px;"></div>
                     </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addDataToForm()">Ok</button>
+                        <a href="#" type="button" class="btn btn-primary" data-dismiss="modal" onclick="addDataToForm(markerStart.getPosition().lat(),markerStart.getPosition().lng());">Ok</a>
                       </div>
                     </div>
                   </div>
@@ -163,8 +167,9 @@ session_start();
     function initialize() {
     directionsDisplay = new google.maps.DirectionsRenderer({
     polylineOptions: {
-      strokeOpacity: 0.00001,
-      strokeWeight: 0
+      //strokeOpacity: 0.00001,
+      //strokeWeight: 0
+      strokeColor: "purple"
     },
     preserveViewport: true
   });
@@ -182,17 +187,16 @@ session_start();
         markerStart = new google.maps.Marker({
             position: new google.maps.LatLng(6.913279, 79.899905),
             map: map,
-            icon: startImage,
             draggable: true
           });
             infowindowStart.open(map, markerStart);
         markerEnd = new google.maps.Marker({
-            position: new google.maps.LatLng(6.933279, 79.849905),
-            map: map,
-            draggable: false
+            position: new google.maps.LatLng(6.9383911, 80.070661),
+            map: map
           });
         
-        google.maps.event.addListener(markerStart, 'dragend', function() { calcRoute(markerStart.getPosition().lat(),markerStart.getPosition().lng(),6.933279, 79.849905); } );
+        google.maps.event.addListener(markerStart, 'dragend', function() { calcRoute(markerStart.getPosition().lat(),markerStart.getPosition().lng(),6.9383911, 80.070661); } );
+        //markerEnd.setVisible(false);
         markers.push(markerStart);
         markers.push(markerEnd);
     }
@@ -214,14 +218,19 @@ session_start();
                 directionsDisplay.setMap(map);
                 directionsDisplay.setOptions( { suppressMarkers: true } );
                 document.getElementById("submitButton").disabled = false;
+                
             } else {
                 document.getElementById("submitButton").disabled = true;
+                alert("Please select markers properly!!!");
             }
         });
     
     }
+    function addDataToForm(startLat,startLong){
+        document.getElementById("startLat").value=String(startLat);
+        document.getElementById("startLong").value=String(startLong);
+    }
     
-    google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 
 </body>
