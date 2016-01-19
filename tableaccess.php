@@ -139,15 +139,31 @@ function getDriverData($driverId){
     return $data;
 }
 
+function checkDriverAvaiable($driverId,$date,$startTime,$endTime){
+	$query = mysql_query("SELECT  hr.date,hr.time,ADDTIME(hr.time,hr.duration) AS end_time FROM hire_request hr , driver d, tour t WHERE hr.request_id = t.request_id AND t.driver_id = d.driver_id AND d.driver_id = '$driverId'");
+    $isAvailable = false;
+    while($row = mysql_fetch_array($query)){ 
+		if($row['date'] == $date){
+			if($startTime <= $row['time'] && $row['time'] <= $endTime ){
+				return $isAvailable; 
+			}else if($startTime <= $row['end_time'] && $row['end_time'] <= $endTime ){
+				return $isAvailable; 
+			}
+		}
+	}
+	$isAvailable = true;
+	return $isAvailable;
+}
 
 function getAvailableHireRequests($driverId){
     $requests = array();
-    $query = mysql_query("SELECT hr.request_id, hr.start_loc_long, hr.start_loc_lat, hr.destination_long, hr.destination_lat, hr.date, hr.time, hr.num_of_passengers, hr.max_bid , hr.contact_no ,hr.vehicle_type FROM hire_request hr WHERE completed != 1");
+    $query = mysql_query("SELECT hr.request_id, hr.start_loc_long, hr.start_loc_lat, hr.destination_long, hr.destination_lat, hr.date, hr.time, hr.num_of_passengers, hr.max_bid , hr.contact_no ,hr.vehicle_type,ADDTIME(hr.time,hr.duration) AS end_time FROM hire_request hr WHERE completed != 1");
     
     while($row = mysql_fetch_array($query)){ // display all rows  from query
 		$driverData = getDriverData($driverId);
 		$unit = "K";
-		if( ( distance($row['start_loc_long'],$row['start_loc_lat'],$driverData[0],$driverData[1],$unit) < 10 ) && ($row['vehicle_type'] == $driverData[2] ) && ($row['num_of_passengers'] <= $driverData[3])){
+
+		if( ( distance($row['start_loc_long'],$row['start_loc_lat'],$driverData[0],$driverData[1],$unit) < 10 ) && ($row['vehicle_type'] == $driverData[2] ) && ($row['num_of_passengers'] <= $driverData[3]) && checkDriverAvaiable($driverId,$row['date'],$row['time'],$row['end_time'])){
 			$requestRow = array();
 			$requestRow[0] = $row['request_id'];
 			$requestRow[1] = $row['start_loc_long'];
