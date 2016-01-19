@@ -68,15 +68,15 @@ session_start();
             <input type="text" name="maxPassengers" id="maxPassengers" class="form-control" placeholder="Maximum Passengers" onfocusout="validateMaxPassengers()" required autofocus>
              <label for="showMap" class="control-label" style="padding-top: 20px">Select Default Location To Filter Hire Requests</label>
             <button name="showMap" type="button" id="showMap" class="btn btn-primary btn-block" onclick="setTimeout(initialize, 500);" data-toggle="modal" data-target="#basicModal">Map</button>
-            <input type="hidden" id="startLat" name="test" value="initial" />
-            <input type="hidden" id="startLong" name="test1" value="initial" />
+            <input type="hidden" id="startLat" name="startLat" value="initial" />
+            <input type="hidden" id="startLong" name="startLong" value="initial" />
             <br>
             <div class=container-fluid style="padding-left: 150px">
                 <div class="col-md-4">
-                    <button class="btn-success" id="submitButton" type="submit" disabled>Submit</button>
+                    <button class="btn btn-success" id="submitButton" type="submit" disabled>Submit</button>
                 </div>
                 <div class="col-md-4">
-                    <button class="btn-primary" type="reset">Reset</button>
+                    <button class="btn btn-primary" type="reset">Reset</button>
                 </div>
             </div>
         </form>
@@ -104,7 +104,7 @@ session_start();
                 </div>
 <script>
     function validateNumber() {
-        /*var num = (document.getElementById("contactNo").value);
+        var num = (document.getElementById("contactNo").value);
         if(num.length == 10){
             if(isNaN(num)){
                 alert("Number should contain digits only!");
@@ -114,10 +114,10 @@ session_start();
         else {
             alert("Wrong number. Number should contain 10 digits!");
             document.getElementById("contactNo").value="";
-        }*/
+        }
 
     }
-    function validateNIC(){/*
+    function validateNIC(){
         var nic = (document.getElementById("nic").value);
         if(nic.length == 10){
             var num = nic.substring(0,9);
@@ -134,9 +134,9 @@ session_start();
         else {
             alert("Wrong NIC number!");
             document.getElementById("nic").value="";
-        }*/
+        }
     }
-    function validateMaxPassengers(){/*
+    function validateMaxPassengers(){
         var num = (document.getElementById("maxPassengers").value);
         var vehicle = (document.getElementById("vehicleType").value);
         if((vehicle == "Car") && (num < 1 || num > 4)){
@@ -150,10 +150,10 @@ session_start();
         else if((vehicle == "3 Wheeler") && (num < 1 || num > 3)) {
             alert("Number of passengers does not match with the vehicle!");
             document.getElementById("maxPassengers").value="";
-        }*/
+        }
     }
     function clearNumPassengers(){
-        //document.getElementById("maxPassengers").value="";
+        document.getElementById("maxPassengers").value="";
     }
     var check="false";
     var map;
@@ -167,9 +167,8 @@ session_start();
     function initialize() {
     directionsDisplay = new google.maps.DirectionsRenderer({
     polylineOptions: {
-      //strokeOpacity: 0.00001,
-      //strokeWeight: 0
-      strokeColor: "purple"
+      strokeOpacity: 0.00001,
+      strokeWeight: 0
     },
     preserveViewport: true
   });
@@ -196,7 +195,7 @@ session_start();
           });
         
         google.maps.event.addListener(markerStart, 'dragend', function() { calcRoute(markerStart.getPosition().lat(),markerStart.getPosition().lng(),6.9383911, 80.070661); } );
-        //markerEnd.setVisible(false);
+        markerEnd.setVisible(false);
         markers.push(markerStart);
         markers.push(markerEnd);
     }
@@ -218,6 +217,7 @@ session_start();
                 directionsDisplay.setMap(map);
                 directionsDisplay.setOptions( { suppressMarkers: true } );
                 document.getElementById("submitButton").disabled = false;
+                addDataToForm(markerStart.getPosition().lat(),markerStart.getPosition().lng());
                 
             } else {
                 document.getElementById("submitButton").disabled = true;
