@@ -3,7 +3,7 @@
 	include "tableaccess.php";
 	$driver_id = $_SESSION['userId'];
 	$driver_name = $_SESSION['name'];
-	header("Refresh:5");
+	//header("Refresh:5");
 ?>
 <!DOCTYPE html>
 <html lang="en">
