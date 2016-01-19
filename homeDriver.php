@@ -66,7 +66,7 @@
             <span class="icon-bar"></span>
           </button>
             <img src="Images/taxilogo.png"  height="50" width="50">
-          <a class="navbar-brand" href="#">Taxi-App</a>
+          <a class="navbar-brand" href="#">Taxi-App Welcome <?php echo $driver_name?></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
