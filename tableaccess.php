@@ -192,6 +192,7 @@ function getAvailableHireRequests($driverId){
     		$unit = "K";
 			//echo $row['request_id']." : ".distance($row['start_loc_long'],$row['start_loc_lat'],$driverData[0],$driverData[1],$unit).($row['vehicle_type'] == $driverData[2] )." : ".($row['num_of_passengers'] <= $driverData[3])." : ".checkDriverAvaiable($driverId,$row['date'],$row['time'],$row['end_time'])."  ";
 			
+			
     		if( ( distance($row['start_loc_long'],$row['start_loc_lat'],$driverData[0],$driverData[1],$unit) < 20 ) && ($row['vehicle_type'] == $driverData[2] ) && ($row['num_of_passengers'] <= $driverData[3]) && checkDriverAvaiable($driverId,$row['date'],$row['time'],$row['end_time'])){
     			$requestRow = array();
     			$requestRow[0] = $row['request_id'];
