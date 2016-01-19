@@ -24,6 +24,7 @@ session_start();
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
 </head>
 
 <body>
@@ -61,10 +62,14 @@ session_start();
 
             <label for="maxPassenger" class="control-label" style="padding-top: 20px">Enter Maximum Number of Passengers</label>
             <input type="text" name="maxPassengers" id="maxPassengers" class="form-control" placeholder="Maximum Passengers" onfocusout="validateMaxPassengers()" required autofocus>
+             <label for="showMap" class="control-label" style="padding-top: 20px">Select Default Location To Filter Hire Requests</label>
+            <button name="showMap" type="button" id="showMap" class="btn btn-primary btn-block" onclick="" data-toggle="modal" data-target="#basicModal">Map</button>
+            <input type="hidden" id="startLat" name="test" value="initial" />
+            <input type="hidden" id="startLong" name="test1" value="initial" />
             <br>
             <div class=container-fluid style="padding-left: 150px">
                 <div class="col-md-4">
-                    <button class="btn-success" type="submit">Submit</button>
+                    <button class="btn-success" id="submitButton" type="submit" disabled>Submit</button>
                 </div>
                 <div class="col-md-4">
                     <button class="btn-primary" type="reset">Reset</button>
@@ -73,10 +78,29 @@ session_start();
         </form>
     </div>
 </div>
-
+  <!--Modal for map -->
+                <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">close x</button>
+                        <h4 class="modal-title" id="myModalLabel">Route for the request</h4>
+                      </div>
+                    <div class="modal-body">
+                    <pre id="distance_duration"></pre>
+                    
+                    
+                    <div id="googleMap" style="width:500px;height:400px; margin:auto; border: 5px solid #73AD21; padding: 15px;"></div>
+                    </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addDataToForm()">Ok</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 <script>
     function validateNumber() {
-        var num = (document.getElementById("contactNo").value);
+        /*var num = (document.getElementById("contactNo").value);
         if(num.length == 10){
             if(isNaN(num)){
                 alert("Number should contain digits only!");
@@ -86,13 +110,10 @@ session_start();
         else {
             alert("Wrong number. Number should contain 10 digits!");
             document.getElementById("contactNo").value="";
-        }
+        }*/
 
     }
-</script>
-
-<script>
-    function validateNIC(){
+    function validateNIC(){/*
         var nic = (document.getElementById("nic").value);
         if(nic.length == 10){
             var num = nic.substring(0,9);
@@ -109,12 +130,9 @@ session_start();
         else {
             alert("Wrong NIC number!");
             document.getElementById("nic").value="";
-        }
+        }*/
     }
-</script>
-
-<script>
-    function validateMaxPassengers(){
+    function validateMaxPassengers(){/*
         var num = (document.getElementById("maxPassengers").value);
         var vehicle = (document.getElementById("vehicleType").value);
         if((vehicle == "Car") && (num < 1 || num > 4)){
@@ -128,15 +146,83 @@ session_start();
         else if((vehicle == "3 Wheeler") && (num < 1 || num > 3)) {
             alert("Number of passengers does not match with the vehicle!");
             document.getElementById("maxPassengers").value="";
-        }
+        }*/
     }
-</script>
-
-<script>
     function clearNumPassengers(){
-        document.getElementById("maxPassengers").value="";
+        //document.getElementById("maxPassengers").value="";
     }
-</script>
+    var check="false";
+    var map;
+    var markers = [];
+    var gLocation; //geo location of the customer
+    var labels ='Taxi';
+    var markerStart;
+    var markerEnd;
+    var directionsDisplay;
+    var directionsService = new google.maps.DirectionsService();
+    function initialize() {
+    directionsDisplay = new google.maps.DirectionsRenderer({
+    polylineOptions: {
+      strokeOpacity: 0.00001,
+      strokeWeight: 0
+    },
+    preserveViewport: true
+  });
+    directionsDisplay.setMap(map);
+      var mapProp = {
+        center:new google.maps.LatLng(6.933279, 79.849905),
+        zoom:13,
+        mapTypeId:google.maps.MapTypeId.ROADMAP
+      };
+      map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+        var infowindowStart = new google.maps.InfoWindow({
+            content: 'Default Location'
+        });
+       
+        markerStart = new google.maps.Marker({
+            position: new google.maps.LatLng(6.913279, 79.899905),
+            map: map,
+            icon: startImage,
+            draggable: true
+          });
+            infowindowStart.open(map, markerStart);
+        markerEnd = new google.maps.Marker({
+            position: new google.maps.LatLng(6.933279, 79.849905),
+            map: map,
+            draggable: false
+          });
+        
+        google.maps.event.addListener(markerStart, 'dragend', function() { calcRoute(markerStart.getPosition().lat(),markerStart.getPosition().lng(),6.933279, 79.849905); } );
+        markers.push(markerStart);
+        markers.push(markerEnd);
+    }
+    function calcRoute(startLat,startLong,endLat,endLong) {
+        var start = new google.maps.LatLng(startLat, startLong);
+        var end = new google.maps.LatLng(endLat, endLong);
+        /*var bounds = new google.maps.LatLngBounds();
+        bounds.extend(start);
+        bounds.extend(end);
+        map.fitBounds(bounds);*/
+        var request = {
+            origin: start,
+            destination: end,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+        directionsService.route(request, function (response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(response);
+                directionsDisplay.setMap(map);
+                directionsDisplay.setOptions( { suppressMarkers: true } );
+                document.getElementById("submitButton").disabled = false;
+            } else {
+                document.getElementById("submitButton").disabled = true;
+            }
+        });
+    
+    }
+    
+    google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
 
 </body>
 </html>
