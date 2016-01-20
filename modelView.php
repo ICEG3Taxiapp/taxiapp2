@@ -41,9 +41,7 @@ function getBids(){
 										<td><?php echo $bid[0] ?></td>
 										<td><?php echo $bid[1] ?></td>
 										<td>
-                                            <form>
-                                            <button type="submit" value="<?php echo $bid[2] ?>" class="btn-success">Accept Ride</button> 
-                                            </form>
+                                            <button type="button" value="<?php echo $bid[2] ?>" class="btn-success">Accept Ride</button> 
                                         </td>
 									 </tr>
 									
@@ -64,7 +62,7 @@ function getBids(){
                             };
                     $.post(ajaxurl, data, function (response) {
                     alert("You have suuccessfully booked a taxi");
-                    location.href = 'seeBids.php';
+                    window.top.location.assign("seeBids.php");
         });
     });
 

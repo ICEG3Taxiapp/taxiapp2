@@ -215,7 +215,7 @@ function getMyHires($driverId){
 
 function getAvailableMessages($driverId){
 	$messages = array();
-	$query = mysql_query("SELECT driver_inbox_id,message,is_viewed FROM driver_inbox WHERE driver_id = '$driverId' ");
+	$query = mysql_query("SELECT driver_inbox_id,message,is_viewed FROM driver_inbox WHERE driver_id = '$driverId' AND is_viewed =0");
     
      while($row = mysql_fetch_array($query)){ // display all rows  from query
 		$data = array();
@@ -227,6 +227,12 @@ function getAvailableMessages($driverId){
     }
     
     return $messages;
+}
+
+function setDriverInboxViewed($driverId,$driverInboxId){
+    $status = "";
+    echo $driverId." ".$driverInboxId;
+    $query = mysql_query("UPDATE driver_inbox SET is_viewed = TRUE WHERE driver_id = '$driverId' AND driver_inbox_id = '$driverInboxId'");
 }
 
 ?>

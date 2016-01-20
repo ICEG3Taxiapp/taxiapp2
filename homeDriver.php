@@ -3,6 +3,7 @@
 	include "tableaccess.php";
 	$driver_id = $_SESSION['userId'];
 	$driver_name = $_SESSION['name'];
+	header("Refresh:5");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -100,7 +101,11 @@
                     <a href="#" onclick="loadAvailableRequests()">Hire Requests</a>
                 </li>
                 <li>
-                    <a href="#"  onclick="loadInbox()">Inbox</a>
+					<?php
+								$messages =getAvailableMessages($driver_id);
+								
+					?>
+                    <a href="#"  onclick="loadInbox()">Inbox ( <?php echo sizeof($messages);?> )</a>
                 </li>
 			</ul>
 		</div>
