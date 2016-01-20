@@ -8,7 +8,6 @@ $longLat = mysql_fetch_array($result);
 if(mysql_num_rows($result)>0){
   $startLong= $longLat['longitude'];
   $startLat= $longLat['lattitude'];
-  echo "<script>alert('properly!!!');</script>";
 }
 else{
   $startLat= 6.9383911;

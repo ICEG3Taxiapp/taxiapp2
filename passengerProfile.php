@@ -19,7 +19,7 @@ session_start();
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<script src="http://maps.googleapis.com/maps/api/js"></script>
 	<style>
-			#bookTaxiUI, #refreshUI{
+			#bookTaxiUI, #seeDriverBidsUI{
 		  background-color: #111;
 		  border: 2px solid #fff;
 		  border-radius: 3px;
@@ -45,7 +45,7 @@ session_start();
 		  
 		}
 
-		#bookTaxiText, #refreshText{
+		#bookTaxiText, #seeDriverBidsText{
 		  color: rgb(255,255,255);
 		  font-family: Roboto,Arial,sans-serif;
 		  font-size: 18px;
@@ -62,7 +62,7 @@ session_start();
 		  padding-right: 5px;
 		}
 
-		#refreshUI,#distanceUI,#durationUI  {
+		#seeDriverBidsUI,#distanceUI,#durationUI  {
 		  margin-left: 50px;
 		}
 	</style>
@@ -103,16 +103,16 @@ session_start();
 	  bookTaxiUI.appendChild(bookTaxiText);
 
 	  // Set CSS for the setCenter control border
-	  var refreshUI = document.createElement('div');
-	  refreshUI.id = 'refreshUI';
-	  refreshUI.title = 'Click to refresh the map';
-	  controlDiv.appendChild(refreshUI);
+	  var seeDriverBidsUI = document.createElement('div');
+	  seeDriverBidsUI.id = 'seeDriverBidsUI';
+	  seeDriverBidsUI.title = 'Click to see driver bids';
+	  controlDiv.appendChild(seeDriverBidsUI);
 
 	  // Set CSS for the control interior
-	  var refreshText = document.createElement('div');
-	  refreshText.id = 'refreshText';
-	  refreshText.innerHTML = 'Refresh';
-	  refreshUI.appendChild(refreshText);
+	  var seeDriverBidsText = document.createElement('div');
+	  seeDriverBidsText.id = 'seeDriverBidsText';
+	  seeDriverBidsText.innerHTML = 'See Driver Bids';
+	  seeDriverBidsUI.appendChild(seeDriverBidsText);
 
 	  // Set CSS for the control border
 	  var durationUI = document.createElement('div');
@@ -152,9 +152,8 @@ session_start();
 
   // Set up the click event listener for 'Set Center': Set the center of the
   // control to the current center of the map.
-  refreshUI.addEventListener('click', function() {
-    var newCenter = map.getCenter();
-    control.setCenter(newCenter);
+  seeDriverBidsUI.addEventListener('click', function() {
+    window.location.assign('seeBids.php');
   });
 }
 	function initialize() {
@@ -200,7 +199,7 @@ session_start();
 	  	google.maps.event.addListener(markerEnd, 'dragend', function() { calcRoute(markerStart.getPosition().lat(),markerStart.getPosition().lng(),markerEnd.getPosition().lat(),markerEnd.getPosition().lng()); } );
 		  markers.push(markerStart);
 		  markers.push(markerEnd);
-		  calcRoute(markerStart.getPosition().lat(),markerStart.getPosition().lng(),markerEnd.getPosition().lat(),markerEnd.getPosition().lng());
+		  //calcRoute(markerStart.getPosition().lat(),markerStart.getPosition().lng(),markerEnd.getPosition().lat(),markerEnd.getPosition().lng());
 	}
 	function calcRoute(startLat,startLong,endLat,endLong) {
         var start = new google.maps.LatLng(startLat, startLong);
@@ -232,10 +231,10 @@ session_start();
                 	document.getElementById("durationUIText").innerHTML="Duration: "+durationHrs+"Hrs "+durationMins+"Mins";
                 }
                 if(distanceKm==0){
-                	document.getElementById("distanceUIText").innerHTML="Duration: "+distanceM+"m";
+                	document.getElementById("distanceUIText").innerHTML="Distance: "+distanceM+"m";
                 }
                 else{
-                	document.getElementById("distanceUIText").innerHTML="Duration: "+distanceKm+"Km "+distanceM+"m";
+                	document.getElementById("distanceUIText").innerHTML="Distance: "+distanceKm+"Km "+distanceM+"m";
                 }
                 check="true";
             } else {
@@ -264,7 +263,7 @@ session_start();
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="index.php">Home</a></li>
+            <li><a href="passengerProfile.php">Home</a></li>
             <li><a href="about.php">About</a></li>
           </ul>
         <div id="navbar" class="navbar-collapse collapse">
@@ -274,13 +273,10 @@ session_start();
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
-    <div class="container">
-  <h2>Tabs</h2>               
-  <ul class="nav nav-pills" role="tablist">
-    <li class="active"><a href="#">Home</a></li>
-    <li><a href="seeBids.php">See Driver Bids</a></li>     
-  </ul>
-</div>
+	<br>
+	<br>
+	<br>
+	<br>
 	<br>
 	<div id="googleMap" style="width:1300px;height:550px; margin:auto; border: 5px solid #73AD21; padding: 15px;"></div>
 	

@@ -17,25 +17,119 @@ if (isset($_POST['requestId'])) {
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script src="http://maps.googleapis.com/maps/api/js"></script>
     <title>passengerProfile</title>
 
     <!-- Bootstrap core CSS -->
 	<link rel="stylesheet" type="text/css" href="css/style.css">
      
-    <script>
-    function sendBidData(requestId){
-        var reqId = requestId;
-        alert(reqId);
-        $(document).ready(function(){
-        data =  {
-                'requestId': reqId
-                };
-            $.post('GlobalUpdate.php', data, function (response) {
-                alert(reqId);
-                document.getElementById("myO").data = "modelView.php?reqId="+reqId;
-        });
+<script>
+  var map;
+  var markers = [];
+  var gLocation; //geo location of the customer
+  var labels ='Taxi';
+  var startImage = 'Images/start3.png';
+  var endImage = 'Images/end.png';
+  var markerStart;
+  var markerEnd;
+  var directionsDisplay;
+  var directionsService = new google.maps.DirectionsService();
+   function initialize() {
+    directionsDisplay = new google.maps.DirectionsRenderer({
+    polylineOptions: {
+      strokeColor: "purple"
+        }
     });
+    directionsDisplay.setMap(map);
+    var mapProp = {
+    center:new google.maps.LatLng(document.getElementById("startLat").value, document.getElementById("startLong").value),
+    zoom:12,
+    mapTypeId:google.maps.MapTypeId.ROADMAP
+    };
+    map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    var centerControlDiv = document.createElement('div');
+    centerControlDiv.index = 1;
+    centerControlDiv.style['padding-top'] = '10px';
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+    var infowindowStart = new google.maps.InfoWindow({
+      content: 'Start'
+    });
+    var infowindowEnd = new google.maps.InfoWindow({
+      content: 'End'
+    });
+    markerStart = new google.maps.Marker({
+      position: new google.maps.LatLng(document.getElementById("startLat").value, document.getElementById("startLong").value),
+      map: map,
+      icon: startImage
+      });
+    markerStart.setVisible(false);
+    infowindowStart.open(map, markerStart);
+    markerEnd = new google.maps.Marker({
+      position: new google.maps.LatLng(document.getElementById("endLat").value, document.getElementById("endLong").value),
+      map: map,
+      icon: endImage
+      });
+    markerEnd.setVisible(false);
+      infowindowEnd.open(map, markerEnd);
+      markers.push(markerStart);
+      markers.push(markerEnd);
+      calcRoute(document.getElementById("startLat").value, document.getElementById("startLong").value,document.getElementById("endLat").value, document.getElementById("endLong").value);
     }
+    function calcRoute(startLat,startLong,endLat,endLong) {
+        var start = new google.maps.LatLng(startLat, startLong);
+        //var end = new google.maps.LatLng(38.334818, -181.884886);
+        var end = new google.maps.LatLng(endLat, endLong);
+        var bounds = new google.maps.LatLngBounds();
+        bounds.extend(start);
+        bounds.extend(end);
+        map.fitBounds(bounds);
+        var request = {
+            origin: start,
+            destination: end,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+        directionsService.route(request, function (response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(response);
+                directionsDisplay.setMap(map);
+                var distance = response.routes[0].legs[0].distance.value;
+                var distanceKm = (distance/1000).toFixed(0);
+                var distanceM = (distance%1000).toFixed(0);
+                var duration = response.routes[0].legs[0].duration.value;
+                var durationHrs = (duration/3600).toFixed(0);
+                var durationMins = (duration%3600/60).toFixed(0);
+                document.getElementById('distance_duration').innerHTML ="Distance: "+distanceKm+"Km "+distanceM+"m. Duration: "+durationHrs+"Hrs "+durationMins+ "mins.";
+            } else {
+                alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+                }
+            });
+
+            
+        }
+        
+      function sendData(startLat,startLong,endLat,endLong){
+        document.getElementById("startLat").value=String(startLat);
+        document.getElementById("startLong").value=String(startLong);
+        document.getElementById("endLat").value=String(endLat);
+        document.getElementById("endLong").value=String(endLong);
+        
+      } 
+
+        function sendBidData(requestId){
+            var reqId = requestId;
+            alert(reqId);
+            $(document).ready(function(){
+            data =  {
+                    'requestId': reqId
+                    };
+                $.post('GlobalUpdate.php', data, function (response) {
+                    alert(reqId);
+                    document.getElementById("myO").data = "modelView.php?reqId="+reqId;
+            });
+        });
+        }
+
       </script>
 
     </head>
@@ -56,7 +150,7 @@ if (isset($_POST['requestId'])) {
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="index.php">Home</a></li>
+            <li><a href="passengerProfile.php">Home</a></li>
             <li><a href="about.php">About</a></li>
           </ul>
         <div id="navbar" class="navbar-collapse collapse">
@@ -66,13 +160,9 @@ if (isset($_POST['requestId'])) {
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
-     <div class="container">
-       <br> <br> <br> 
-  <ul class="nav nav-pills" role="tablist">
-    <li><a href="passengerProfile.php">Home</a></li>
-    <li class="active"><a href="#">See Driver Bids</a></li>     
-  </ul>
-</div>
+    <br>
+    <br>
+    <br>
 	<br>
 <?php
     /*$id = $_SESSION['userId'];
@@ -142,8 +232,7 @@ function getMyRequests(){
 }
 ?>
         
- <div class="container">
-            <div class="jumbotron">
+ <div class="container" >
                 
                     <br>
                     <br>
@@ -169,6 +258,7 @@ function getMyRequests(){
                                         <td align="center">
                                             <button type ="button" href="#" onclick="sendBidData(<?php echo $request[0]?>)" class="btn btn-info btn-lg" data-toggle="modal" data-target="#basicModal2">See Bids</button>
                                         </td>
+                                        <td><a href="#" class="btn btn-lg btn-success" onclick="sendData(<?php echo $request[2]?>,<?php echo $request[1]?>,<?php echo $request[4]?>,<?php echo $request[3]?>);setTimeout(initialize, 500);" data-toggle="modal" data-target="#basicModal">Map</a></td>
 									 </tr>
 									
 						
@@ -180,7 +270,30 @@ function getMyRequests(){
                     </div>
                 </div>
      
-     
+     <!--Modal for map -->
+                <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">close x</button>
+                        <h4 class="modal-title" id="myModalLabel">Route for the request</h4>
+                      </div>
+                    <div class="modal-body">
+                    <input type="hidden" id="startLat" name="test" value="initial" />
+                    <input type="hidden" id="startLong" name="test1" value="initial" />
+                    <input type="hidden" id="endLat" name="test2" value="initial" />
+                    <input type="hidden" id="endLong" name="test3" value="initial" />
+                    <pre id="distance_duration"></pre>
+                    
+                    
+                    <div id="googleMap" style="width:500px;height:400px; margin:auto; border: 5px solid #73AD21; padding: 15px;"></div>
+                    </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
      <!--Modal for bid -->
                 <div class="modal fade" id="basicModal2" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
                   <div class="modal-dialog modal-lg">
@@ -204,7 +317,6 @@ function getMyRequests(){
                     
                     </div>
                     </div>
-                  </div>
                 </div>
          
 </body>
