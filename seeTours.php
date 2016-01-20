@@ -19,6 +19,12 @@ include "header.php";
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
+      <script>
+    function sendData(tourId){
+        document.getElementById("tourId").value=String(tourId);
+        alert(tourId);
+    }
+      </script>
     </head>
     <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -107,8 +113,7 @@ function getTours(){
 										<td><?php echo $tour[2] ?></td>
                                         <td><?php echo $tour[3] ?></td>
 										<td><?php echo $tour[4] ?></td>
-										<td>
-                                            <button type="submit" value="" class="btn-success">Accept Ride</button>                                             </td>
+										<td align="center"><button href="#" class="btn btn-sm btn-warning" onclick="sendData(<?php echo $tour[5]?>)" data-toggle="modal" data-target="#basicModal3"> Give Feedback</button></td>
 									 </tr>
 									
 						
@@ -137,6 +142,37 @@ function getTours(){
 
 });
         </script>
+        
+        <!--Modal for bid -->
+                <div class="modal fade" id="basicModal3" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">close x</button>
+                        <h4 class="modal-title" id="myModalLabel">Feedback </h4>
+                      </div>
+                    <div class="modal-body">
+                    
+                    <pre id="bid">Give your feedback on tour</pre>
+                    <div class="container" style="width:250px;">
+                      <form method="POST" action="" method ="post">
+                          <div style="padding-top:10px;"></div>
+                          <input type="text" name="tourId" id="tourId" class="form-control" value =""/>
+                          <input type="text" name="feedBack" id="feedBack" class="form-control"/>
+                          <input type="text" name="rating" id="rating" class="form-control"/>
+                          <button  type="submit">Done</button>
+                            
+                      </form>
+                     </div>
+                    
+                    </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
 	
 </body>
 
