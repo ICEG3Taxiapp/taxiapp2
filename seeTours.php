@@ -66,7 +66,7 @@ function getTours(){
     $tours = array();
      $id = $_SESSION['userId'];
     //SELECT request_id FROM `hire_request` WHERE contact_no = "$id"
-    $query = mysql_query("select driver.name,driver.contact_no,hire_request.date,hire_request.time,hire_request.num_of_passengers,tour.charge,tour.tour_id FROM tour INNER JOIN hire_request ON tour.request_id = hire_request.request_id INNER JOIN driver ON driver.driver_id = tour.driver_id WHERE tour.request_id IN (SELECT hire_request.request_id FROM `hire_request` WHERE contact_no = '0717673721')");
+    $query = mysql_query("select driver.name,driver.contact_no,hire_request.date,hire_request.time,hire_request.num_of_passengers,tour.charge,tour.tour_id,tour.TCompleted FROM tour INNER JOIN hire_request ON tour.request_id = hire_request.request_id INNER JOIN driver ON driver.driver_id = tour.driver_id WHERE tour.request_id IN (SELECT hire_request.request_id FROM `hire_request` WHERE contact_no = '$id')");
     
     while($row = mysql_fetch_array($query)){ // display all rows  from query
 		$tourRow = array();
@@ -77,7 +77,12 @@ function getTours(){
         $tourRow[4] = $row['charge'];
         $tourRow[5] = $row['tour_id'];
         $tourRow[6] = $row['name'];
-		 
+        $tourRow[7] = $row['TCompleted'];
+        if($tourRow[7] == 1){
+            $tourRow[7] = "disabled";
+        }else{
+            $tourRow[7] = "";
+        }
         $tours[]= $tourRow;
        
     }
@@ -113,7 +118,7 @@ function getTours(){
 										<td><?php echo $tour[2] ?></td>
                                         <td><?php echo $tour[3] ?></td>
 										<td><?php echo $tour[4] ?></td>
-										<td align="center"><button href="#" class="btn btn-sm btn-warning" onclick="sendData(<?php echo $tour[5]?>)" data-toggle="modal" data-target="#basicModal3"> Give Feedback</button></td>
+										<td align="center"><button href="#" class="btn btn-sm btn-warning" onclick="sendData(<?php echo $tour[5]?>)" data-toggle="modal" data-target="#basicModal3" <?php echo $tour[7]?> > Give Feedback</button></td>
 									 </tr>
 									
 						
@@ -128,20 +133,6 @@ function getTours(){
                 
             </div>
         </div>
-        
-        <script>
-            $(document).ready(function(){
-                $('.btn-success').click(function(){
-                    var clickBtnValue = $(this).val();
-                    var ajaxurl = 'ajax.php',
-                    data =  {'requestId': clickBtnValue};
-                    $.post(ajaxurl, data, function (response) {
-                    alert("You have suuccessfully booked a taxi");
-        });
-    });
-
-});
-        </script>
         
         <!--Modal for bid -->
                 <div class="modal fade" id="basicModal3" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
