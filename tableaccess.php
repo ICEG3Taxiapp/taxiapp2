@@ -36,8 +36,7 @@ function getHireRequests(){
     		$requestRow[9] = $row['contact_no'];
     		 
             $requests[]= $requestRow;
-            
-           
+
         }
         return $requests;
     }
@@ -60,14 +59,25 @@ function getAvailability($driverId){
 }
 
 function changeAvailability($driverId){
+	mysql_query("START TRANSACTION");
     $status = "";
     $query = mysql_query("UPDATE driver SET availability = availability XOR 1 WHERE  driver_id = '$driverId'");
-    
+    if ($query) {
+		mysql_query("COMMIT");
+	} else {        
+		mysql_query("ROLLBACK");
+	}
 }
+
 function insertDriverBid($driverId,$requestId,$bid){
+	mysql_query("START TRANSACTION");
 	echo $driverId,$requestId,$bid;
     $query = mysql_query("INSERT INTO driverbid (`bid`, `driver_id`, `request_id`) VALUES ('$bid','$driverId','$requestId')");
-    
+    if ($query) {
+		mysql_query("COMMIT");
+	} else {        
+		mysql_query("ROLLBACK");
+	}
 }
 
 function hasBid($driverId,$requestId){
@@ -117,7 +127,6 @@ function getBidStatus($driverId,$requestId){
     }
 }
 
-//////// 18 / 1/ 2016
 
 function distance($lat1, $lon1, $lat2, $lon2, $unit) {
 
@@ -182,6 +191,7 @@ function getAvailableHireRequests($driverId){
     		$driverData = getDriverData($driverId);
     		$unit = "K";
 			//echo $row['request_id']." : ".distance($row['start_loc_long'],$row['start_loc_lat'],$driverData[0],$driverData[1],$unit).($row['vehicle_type'] == $driverData[2] )." : ".($row['num_of_passengers'] <= $driverData[3])." : ".checkDriverAvaiable($driverId,$row['date'],$row['time'],$row['end_time'])."  ";
+			
 			
     		if( ( distance($row['start_loc_long'],$row['start_loc_lat'],$driverData[0],$driverData[1],$unit) < 20 ) && ($row['vehicle_type'] == $driverData[2] ) && ($row['num_of_passengers'] <= $driverData[3]) && checkDriverAvaiable($driverId,$row['date'],$row['time'],$row['end_time'])){
     			$requestRow = array();
@@ -257,9 +267,15 @@ function getAvailableMessages($driverId){
 }
 
 function setDriverInboxViewed($driverId,$driverInboxId){
+	mysql_query("START TRANSACTION");
     $status = "";
     echo $driverId." ".$driverInboxId;
     $query = mysql_query("UPDATE driver_inbox SET is_viewed = TRUE WHERE driver_id = '$driverId' AND driver_inbox_id = '$driverInboxId'");
+    if ($query) {
+		mysql_query("COMMIT");
+	} else {        
+		mysql_query("ROLLBACK");
+	}
 }
 
 ?>
