@@ -2,12 +2,19 @@
 include "header.php";
 $driver_id = $_SESSION['userId'];
 $driver_name = $_SESSION['name'];
-$sql = "SELECT 'longitude','lattitude' FROM driver WHERE 'driver_id'='$driver_id'";
+$sql = "SELECT * FROM driver WHERE driver_id='$driver_id'";
 $result= mysql_query($sql);
 $longLat = mysql_fetch_array($result);
-if($longLat){
+if(mysql_num_rows($result)>0){
   $startLong= $longLat['longitude'];
   $startLat= $longLat['lattitude'];
+  echo "<script>alert('properly!!!');</script>";
+}
+else{
+  $startLat= 6.9383911;
+  $startLong= 80.070661;
+  echo "<script>alert('Your default locations are not set. Please select properly!!!');</script>";
+  //echo "<script>window.top.location.assign('homeDriver.php')</script>";
 }
 ?>
 
@@ -31,19 +38,20 @@ if($longLat){
     
 </head>
 <body>
-  <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">close x</button>
-        <h4 class="modal-title" id="myModalLabel">Default Location</h4>
+  <div class="container" style="position:absolute; top:2%; left:8%;">
+  <div class="">
+      <h4 class="modal-title" id="myModalLabel">Default Location</h4>
       </div>
-    <div class="modal-body">
-    <pre id="distance_duration">Select the default location to filter hire requests</pre>
+    <div class="span12">
+    <pre id="distance_duration">Your default location is shown on the map. If you want to change it drag the marker and press OK. </pre>
     
     
     <div id="googleMap" style="width:500px;height:400px; margin:auto; border: 5px solid #73AD21; padding: 15px;"></div>
     </div>
-      <div class="modal-footer">
-        <a href="#" type="button" class="btn btn-primary" data-dismiss="modal" onclick="addDataToForm(markerStart.getPosition().lat(),markerStart.getPosition().lng());">Ok</a>
-      </div>
+      <div class="btn-group " style="position:absolute; right:10%;">
+        <button type="button" class="btn btn-primary" onclick="window.location.assign('changeLocation.php?startLat='+markerStart.getPosition().lat()+'&startLong='+markerStart.getPosition().lng())">Ok</button>
+        <button type="button" class="btn btn-danger" onclick="window.top.location.assign('homeDriver.php')">Cancel</button>
+       </div>
     </div>
   <script>
  var map;
@@ -106,7 +114,6 @@ if($longLat){
                 directionsDisplay.setDirections(response);
                 directionsDisplay.setMap(map);
                 directionsDisplay.setOptions( { suppressMarkers: true } );
-                addDataToForm(markerStart.getPosition().lat(),markerStart.getPosition().lng());
                 
             } else {
                 alert("Please select markers properly!!!");

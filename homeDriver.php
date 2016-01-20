@@ -3,7 +3,7 @@
 	include "tableaccess.php";
 	$driver_id = $_SESSION['userId'];
 	$driver_name = $_SESSION['name'];
-	header("Refresh:5");
+	//header("Refresh:5");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -76,7 +76,7 @@
           </ul>
         <div id="navbar" class="navbar-collapse collapse">
           <form class="navbar-form navbar-right" action="footer.php">
-            <button type="button" class="btn btn-danger">Change Default Location</button>
+            <button type="button" class="btn btn-danger" onclick="loadMap()">Change Default Location</button>
             <button type="submit" class="btn btn-danger">Sign Out</button>
           </form>
           <!--form class="navbar-form navbar-right" action="CallFunction.php" method ="post" >
@@ -105,7 +105,7 @@
 								$messages =getAvailableMessages($driver_id);
 								
 					?>
-                    <a href="#"  onclick="loadInbox()">Inbox ( <?php echo sizeof($messages);?> )</a>
+                    <a href="#"  id="inboxCount" onclick="loadInbox()">Inbox ( <?php echo sizeof($messages);?> )</a>
                 </li>
 			</ul>
 		</div>
