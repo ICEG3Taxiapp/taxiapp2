@@ -154,11 +154,11 @@ function getTours(){
                     <div class="modal-body">
                     
                     <pre id="bid">Give your feedback on tour</pre>
-                    <div class="container" style="width:250px;">
+                    <div class="container" style="width:500px;">
                       <form method="POST" action="addFeedback.php" method ="post" id ="myform">
                           <input type="text" name="tourId" id="tourId" class="form-control" value =""/>
                           <input type="text" name="rating" id="rating" class="form-control"/>
-                          <textarea name="feedBack" form="myform">Enter your feedback...</textarea>
+                          <textarea style="width:480px;" name="feedBack" form="myform">Enter your feedback...</textarea>
                           <button  type="submit">Done</button>
                             
                       </form>
