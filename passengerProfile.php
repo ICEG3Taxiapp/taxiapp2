@@ -264,7 +264,7 @@ session_start();
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="index.php">Home</a></li>
+            <li><a href="passengerProfile.php">Home</a></li>
             <li><a href="about.php">About</a></li>
             <li><a href="seeBids.php">My reqests</a></li>
             <li><a href="seeTours.php">My Tours</a></li>

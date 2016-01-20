@@ -20,7 +20,7 @@ if (isset($_POST['driverId'])) {
     
     $result = mysql_query("INSERT INTO `taxiapp`.`tour` ( `charge`, `driver_id`, `request_id`) VALUES ( '$bid', '$driverId', '$requestId')");
     
-    $result2 = mysql_query("INSERT INTO `taxiapp`.`driver_inbox` (`driver_id`, `message`) VALUES ('$driverId', 'mdssada')");
+    $result2 = mysql_query("INSERT INTO `taxiapp`.`driver_inbox` (`driver_id`, `message`) VALUES ('$driverId', '$id has accept your request for a taxi ride')");
     
     echo $contact_no;
 }

@@ -22,7 +22,7 @@ include "header.php";
       <script>
     function sendData(tourId){
         document.getElementById("tourId").value=String(tourId);
-        alert(tourId);
+        //alert(tourId);
     }
       </script>
     </head>
@@ -41,7 +41,7 @@ include "header.php";
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="index.php">Home</a></li>
+            <li><a href="passengerProfile.php">Home</a></li>
             <li><a href="about.php">About</a></li>
             <li><a href="seeBids.php">My reqests</a></li>
             <li><a href="seeTours.php">My Tours</a></li>
@@ -88,8 +88,7 @@ function getTours(){
 ?>
     
     <div class="container">
-            <div class="jumbotron">
-                
+
                     <br>
                     <br>
                     <br>
@@ -126,7 +125,6 @@ function getTours(){
                     </table>
                     </div>
                     <br>
-                        </div>
                 
             </div>
         </div>

@@ -70,7 +70,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="index.php">Home</a></li>
+            <li><a href="homeDriver.php">Home</a></li>
             <li><a href="about.php">About</a></li>
 
           </ul>

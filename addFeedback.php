@@ -9,6 +9,6 @@
      while($row = mysql_fetch_array($queryF)){ // display all rows  from query
 		$driverId = $row['driver_id'];
     }
-    mysql_query("INSERT INTO `taxiapp`.`driver_inbox` (`driver_id`, `message`) VALUES ('$driverId', 'Passnger has rated you rating = .$rating.')");
+    mysql_query("INSERT INTO `taxiapp`.`driver_inbox` (`driver_id`, `message`) VALUES ('$driverId', 'Passnger has rated you rating = $rating \nFeedback $feedBack')");
     header('Location: /T/TaxiApp2/seeTours.php');
 ?>
