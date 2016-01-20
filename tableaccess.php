@@ -156,7 +156,9 @@ function getDriverData($driverId){
 function checkDriverAvaiable($driverId,$date,$startTime,$endTime){
 	$query = mysql_query("SELECT  hr.date,hr.time,ADDTIME(hr.time,hr.duration) AS end_time FROM hire_request hr , driver d, tour t WHERE hr.request_id = t.request_id AND t.driver_id = d.driver_id AND d.driver_id = '$driverId'");
     $isAvailable = false;
-    if($query!=null &&mysql_num_rows($query)>0){
+    //echo $date." : ".$startTime." ".$endTime; 
+    if($query!=null && mysql_num_rows($query)>0){
+		//echo $row['date']."= ".$date." : ".$startTime." ".$row['time']." ".$endTime; 
         while($row = mysql_fetch_array($query)){ 
     		if($row['date'] == $date){
     			if($startTime <= $row['time'] && $row['time'] <= $endTime ){
@@ -166,23 +168,22 @@ function checkDriverAvaiable($driverId,$date,$startTime,$endTime){
     			}
     		}
     	}
-    	$isAvailable = true;
-    	return $isAvailable;
     }
-    else{
-        return null;
-    }
+    $isAvailable = true;
+    return $isAvailable;
 }
 
 function getAvailableHireRequests($driverId){
     $requests = array();
     $query = mysql_query("SELECT hr.request_id, hr.start_loc_long, hr.start_loc_lat, hr.destination_long, hr.destination_lat, hr.date, hr.time, hr.num_of_passengers, hr.max_bid , hr.contact_no ,hr.vehicle_type,ADDTIME(hr.time,hr.duration) AS end_time FROM hire_request hr WHERE completed != 1");
     if($query!=null &&mysql_num_rows($query)>0){
+		
         while($row = mysql_fetch_array($query)){ // display all rows  from query
     		$driverData = getDriverData($driverId);
     		$unit = "K";
-
-    		if( ( distance($row['start_loc_long'],$row['start_loc_lat'],$driverData[0],$driverData[1],$unit) < 10 ) && ($row['vehicle_type'] == $driverData[2] ) && ($row['num_of_passengers'] <= $driverData[3]) && checkDriverAvaiable($driverId,$row['date'],$row['time'],$row['end_time'])){
+			//echo $row['request_id']." : ".distance($row['start_loc_long'],$row['start_loc_lat'],$driverData[0],$driverData[1],$unit).($row['vehicle_type'] == $driverData[2] )." : ".($row['num_of_passengers'] <= $driverData[3])." : ".checkDriverAvaiable($driverId,$row['date'],$row['time'],$row['end_time'])."  ";
+			
+    		if( ( distance($row['start_loc_long'],$row['start_loc_lat'],$driverData[0],$driverData[1],$unit) < 20 ) && ($row['vehicle_type'] == $driverData[2] ) && ($row['num_of_passengers'] <= $driverData[3]) && checkDriverAvaiable($driverId,$row['date'],$row['time'],$row['end_time'])){
     			$requestRow = array();
     			$requestRow[0] = $row['request_id'];
     			$requestRow[1] = $row['start_loc_long'];
@@ -206,11 +207,8 @@ function getAvailableHireRequests($driverId){
     		//echo distance($row['start_loc_long'],$row['start_loc_lat'],$driverData[0],$driverData[1],$unit);
        
         }
-        return $requests;
     }
-    else{
-        return null;
-    }
+    return $requests;
 }
 
 function getMyHires($driverId){
@@ -242,7 +240,7 @@ function getMyHires($driverId){
 
 function getAvailableMessages($driverId){
 	$messages = array();
-	$query = mysql_query("SELECT driver_inbox_id,message,is_viewed FROM driver_inbox WHERE driver_id = '$driverId' AND is_viewed =0");
+	$query = mysql_query("SELECT driver_inbox_id,message,is_viewed FROM driver_inbox WHERE driver_id = '$driverId' AND is_viewed = 0");
     if($query!=null &&mysql_num_rows($query)>0){
          while($row = mysql_fetch_array($query)){ // display all rows  from query
     		$data = array();
@@ -255,9 +253,7 @@ function getAvailableMessages($driverId){
         
         return $messages;
     }
-    //else{
-    //    return null;
-   // }
+
 }
 
 function setDriverInboxViewed($driverId,$driverInboxId){
