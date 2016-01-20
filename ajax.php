@@ -6,6 +6,7 @@ if (isset($_POST['driverId'])) {
     //$bid = $_POST['bid'];
     //$driverId = $_POST['driverId'];
     $id = $_SESSION['userId'];
+    $name = $_SESSION['name'];
     
     $queryup = mysql_query("UPDATE `taxiapp`.`hire_request` SET `completed` = '1' WHERE `hire_request`.`request_id` = '$requestId'");
     
@@ -20,7 +21,7 @@ if (isset($_POST['driverId'])) {
     
     $result = mysql_query("INSERT INTO `taxiapp`.`tour` ( `charge`, `driver_id`, `request_id`) VALUES ( '$bid', '$driverId', '$requestId')");
     
-    $result2 = mysql_query("INSERT INTO `taxiapp`.`driver_inbox` (`driver_id`, `message`) VALUES ('$driverId', '$id has accept your request for a taxi ride')");
+    $result2 = mysql_query("INSERT INTO `taxiapp`.`driver_inbox` (`driver_id`, `message`) VALUES ('$driverId', '$name has accept your request for a taxi ride. Contact: $id')");
     
     echo $contact_no;
 }
