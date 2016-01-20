@@ -30,28 +30,44 @@
 
   <body>
  
-    
     <div class="container" >
             <div class="jumbotron" style="background-color:white;">
                 
                     <div class="panel panel-primary" >
                     <div class="panel-heading">Inbox</div>
 						<table class="table table-condensed">
-							<th>Message</th>
+							
 							
 							<?php
 								$messages =getAvailableMessages($driver_id);
-
+							
+							
 								$count=sizeof($messages);
-                echo "<script>document.getElementById('inboxCount').innerHTML=Inbox ( ".$count." )</script>";
-								foreach ($messages as $message) {
+								//echo "<script>document.getElementById('inboxCount').innerHTML=Inbox ( ".$count." )</script>";
+								if($messages!= null){
+								
+							?>
+									<th>Message</th>	
+									<th></th>
+							<?php
+									foreach ($messages as $message) {
 							?>
 										<tr>
-											<td><?php echo $message[1] ?></td>
-											<td align="center"><button href="#" class="btn btn-sm btn-success" onclick="<?php setDriverInboxViewed($driver_id,$message[0]) ; ?>"  > OK</button></td>
+											<td><?php echo $message[1] ?></td>											
+											<td>
+												<form action="setMessageViewed.php" method ="post" target="_parent" >
+													<input type="hidden" name="driver_id" value="<?=$driver_id?>" />
+													<input type="hidden" name="driver_inbox_id" value="<?=$message[0]?>" />
+													<input type="submit" class="btn btn-default" value = "OK"/>
+												</form>
+										    </td>
 										</tr>
 							<?php		
 															
+									}
+								}
+								else{
+									echo "No Messages found ...";
 								}
 							?>
 						
