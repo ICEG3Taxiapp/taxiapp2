@@ -255,9 +255,9 @@ function getAvailableMessages($driverId){
         
         return $messages;
     }
-    else{
-        return null;
-    }
+    //else{
+    //    return null;
+   // }
 }
 
 function setDriverInboxViewed($driverId,$driverInboxId){
