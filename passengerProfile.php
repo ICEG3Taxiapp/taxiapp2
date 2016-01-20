@@ -239,6 +239,7 @@ session_start();
                 check="true";
             } else {
                 check="false";
+                alert("Please select markers properly!!!");
             }
         });
 	
