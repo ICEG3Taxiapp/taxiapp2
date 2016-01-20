@@ -118,13 +118,13 @@ if (isset($_POST['requestId'])) {
 
         function sendBidData(requestId){
             var reqId = requestId;
-            alert(reqId);
+            //alert(reqId);
             $(document).ready(function(){
             data =  {
                     'requestId': reqId
                     };
                 $.post('GlobalUpdate.php', data, function (response) {
-                    alert(reqId);
+                    //alert(reqId);
                     document.getElementById("myO").data = "modelView.php?reqId="+reqId;
             });
         });
@@ -152,6 +152,8 @@ if (isset($_POST['requestId'])) {
           <ul class="nav navbar-nav">
             <li><a href="passengerProfile.php">Home</a></li>
             <li><a href="about.php">About</a></li>
+            <li><a href="seeBids.php">My reqests</a></li>
+            <li><a href="seeTours.php">My Tours</a></li>
           </ul>
         <div id="navbar" class="navbar-collapse collapse">
           <form class="navbar-form navbar-right" action="footer.php">
@@ -234,8 +236,7 @@ function getMyRequests(){
         
  <div class="container" >
                 
-                    <br>
-                    <br>
+                    
                     <br>
                     <div class="panel panel-primary">
                     <div class="panel-heading">Hire Request</div>

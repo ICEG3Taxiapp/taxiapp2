@@ -22,7 +22,7 @@ include "header.php";
       <script>
     function sendData(tourId){
         document.getElementById("tourId").value=String(tourId);
-        alert(tourId);
+        //alert(tourId);
     }
       </script>
     </head>
@@ -41,8 +41,10 @@ include "header.php";
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li><a href="index.php">Home</a></li>
+            <li><a href="passengerProfile.php">Home</a></li>
             <li><a href="about.php">About</a></li>
+            <li><a href="seeBids.php">My reqests</a></li>
+            <li><a href="seeTours.php">My Tours</a></li>
           </ul>
         <div id="navbar" class="navbar-collapse collapse">
           <form class="navbar-form navbar-right" action="footer.php">
@@ -53,11 +55,6 @@ include "header.php";
     </nav>
      <div class="container">
        <br> 
-  <ul class="nav nav-pills" role="tablist">
-    <li><a href="passengerProfile.php">Home</a></li>
-    <li><a href="seeBids.php">See Driver Bids</a></li>
-    <li class="active"><a href="#">See my Tours</a></li> 
-  </ul>
 </div>
 	<br>
 <?php
@@ -66,7 +63,7 @@ function getTours(){
     $tours = array();
      $id = $_SESSION['userId'];
     //SELECT request_id FROM `hire_request` WHERE contact_no = "$id"
-    $query = mysql_query("select driver.name,driver.contact_no,hire_request.date,hire_request.time,hire_request.num_of_passengers,tour.charge,tour.tour_id FROM tour INNER JOIN hire_request ON tour.request_id = hire_request.request_id INNER JOIN driver ON driver.driver_id = tour.driver_id WHERE tour.request_id IN (SELECT hire_request.request_id FROM `hire_request` WHERE contact_no = '0717673721')");
+    $query = mysql_query("select driver.name,driver.contact_no,hire_request.date,hire_request.time,hire_request.num_of_passengers,tour.charge,tour.tour_id,tour.TCompleted FROM tour INNER JOIN hire_request ON tour.request_id = hire_request.request_id INNER JOIN driver ON driver.driver_id = tour.driver_id WHERE tour.request_id IN (SELECT hire_request.request_id FROM `hire_request` WHERE contact_no = '$id')");
     
     while($row = mysql_fetch_array($query)){ // display all rows  from query
 		$tourRow = array();
@@ -77,7 +74,12 @@ function getTours(){
         $tourRow[4] = $row['charge'];
         $tourRow[5] = $row['tour_id'];
         $tourRow[6] = $row['name'];
-		 
+        $tourRow[7] = $row['TCompleted'];
+        if($tourRow[7] == 1){
+            $tourRow[7] = "disabled";
+        }else{
+            $tourRow[7] = "";
+        }
         $tours[]= $tourRow;
        
     }
@@ -86,8 +88,7 @@ function getTours(){
 ?>
     
     <div class="container">
-            <div class="jumbotron">
-                
+
                     <br>
                     <br>
                     <br>
@@ -113,7 +114,7 @@ function getTours(){
 										<td><?php echo $tour[2] ?></td>
                                         <td><?php echo $tour[3] ?></td>
 										<td><?php echo $tour[4] ?></td>
-										<td align="center"><button href="#" class="btn btn-sm btn-warning" onclick="sendData(<?php echo $tour[5]?>)" data-toggle="modal" data-target="#basicModal3"> Give Feedback</button></td>
+										<td align="center"><button href="#" class="btn btn-sm btn-warning" onclick="sendData(<?php echo $tour[5]?>)" data-toggle="modal" data-target="#basicModal3" <?php echo $tour[7]?> > Give Feedback</button></td>
 									 </tr>
 									
 						
@@ -124,24 +125,9 @@ function getTours(){
                     </table>
                     </div>
                     <br>
-                        </div>
                 
             </div>
         </div>
-        
-        <script>
-            $(document).ready(function(){
-                $('.btn-success').click(function(){
-                    var clickBtnValue = $(this).val();
-                    var ajaxurl = 'ajax.php',
-                    data =  {'requestId': clickBtnValue};
-                    $.post(ajaxurl, data, function (response) {
-                    alert("You have suuccessfully booked a taxi");
-        });
-    });
-
-});
-        </script>
         
         <!--Modal for bid -->
                 <div class="modal fade" id="basicModal3" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
@@ -154,12 +140,17 @@ function getTours(){
                     <div class="modal-body">
                     
                     <pre id="bid">Give your feedback on tour</pre>
-                    <div class="container" style="width:250px;">
-                      <form method="POST" action="" method ="post">
-                          <div style="padding-top:10px;"></div>
-                          <input type="text" name="tourId" id="tourId" class="form-control" value =""/>
-                          <input type="text" name="feedBack" id="feedBack" class="form-control"/>
-                          <input type="text" name="rating" id="rating" class="form-control"/>
+                    <div class="container" style="width:500px;">
+                      <form method="POST" action="addFeedback.php" method ="post" id ="myform">
+                          <input type="hidden" name="tourId" id="tourId" class="form-control" value =""/>
+                          <select name="rating" id="rating" class="form-control">
+                          <option value="5">5</option>
+                          <option value="4">4</option>
+                          <option value="3">3</option>
+                          <option value="2">2</option>
+                            <option value="1">1</option>
+                            </select>
+                          <textarea style="width:480px;" name="feedBack" form="myform">Enter your feedback...</textarea>
                           <button  type="submit">Done</button>
                             
                       </form>

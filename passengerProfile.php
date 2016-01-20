@@ -259,13 +259,15 @@ session_start();
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-            <img src="Images/car.gif"  height="50" width="50">
+            <img src="Images/taxilogo.png"  height="50" width="50">
           <a class="navbar-brand" href="#">Taxi-App Welcome <?php echo $_SESSION['name'] ?></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><a href="passengerProfile.php">Home</a></li>
             <li><a href="about.php">About</a></li>
+            <li><a href="seeBids.php">My reqests</a></li>
+            <li><a href="seeTours.php">My Tours</a></li>
           </ul>
         <div id="navbar" class="navbar-collapse collapse">
           <form class="navbar-form navbar-right" action="footer.php">

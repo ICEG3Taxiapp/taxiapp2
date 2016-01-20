@@ -61,7 +61,7 @@ function getBids(){
                                 'driverId': clickBtnValue
                             };
                     $.post(ajaxurl, data, function (response) {
-                    alert("You have suuccessfully booked a taxi");
+                    alert("You have suuccessfully booked a taxi\nDriver's Contact No : " + response);
                     window.top.location.assign("seeBids.php");
         });
     });

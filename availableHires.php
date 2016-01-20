@@ -154,6 +154,7 @@
 							
 							<?php
 								$hireRequests =getAvailableHireRequests($driver_id);
+								
 								if(sizeof($hireRequests) > 0){
 							?>
 							<table class="table table-condensed">
