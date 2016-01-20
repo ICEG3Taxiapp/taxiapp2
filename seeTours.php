@@ -43,6 +43,8 @@ include "header.php";
           <ul class="nav navbar-nav">
             <li><a href="index.php">Home</a></li>
             <li><a href="about.php">About</a></li>
+            <li><a href="seeBids.php">My reqests</a></li>
+            <li><a href="seeTours.php">My Tours</a></li>
           </ul>
         <div id="navbar" class="navbar-collapse collapse">
           <form class="navbar-form navbar-right" action="footer.php">
@@ -53,11 +55,6 @@ include "header.php";
     </nav>
      <div class="container">
        <br> 
-  <ul class="nav nav-pills" role="tablist">
-    <li><a href="passengerProfile.php">Home</a></li>
-    <li><a href="seeBids.php">See Driver Bids</a></li>
-    <li class="active"><a href="#">See my Tours</a></li> 
-  </ul>
 </div>
 	<br>
 <?php
@@ -147,8 +144,14 @@ function getTours(){
                     <pre id="bid">Give your feedback on tour</pre>
                     <div class="container" style="width:500px;">
                       <form method="POST" action="addFeedback.php" method ="post" id ="myform">
-                          <input type="text" name="tourId" id="tourId" class="form-control" value =""/>
-                          <input type="text" name="rating" id="rating" class="form-control"/>
+                          <input type="hidden" name="tourId" id="tourId" class="form-control" value =""/>
+                          <select name="rating" id="rating" class="form-control">
+                          <option value="5">5</option>
+                          <option value="4">4</option>
+                          <option value="3">3</option>
+                          <option value="2">2</option>
+                            <option value="1">1</option>
+                            </select>
                           <textarea style="width:480px;" name="feedBack" form="myform">Enter your feedback...</textarea>
                           <button  type="submit">Done</button>
                             
